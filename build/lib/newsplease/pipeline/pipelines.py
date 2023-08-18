@@ -138,20 +138,20 @@ class MySQLStorage(object):
     compare_versions = ("SELECT * FROM CurrentVersions WHERE url=%s")
     insert_current = ("INSERT INTO CurrentVersions(local_path,\
                           modified_date,download_date,source_domain,url,\
-                          html_title, ancestor, descendant, version,\
+                          html_title, ancestor, maintext, descendant, version,\
                           rss_title) VALUES (%(local_path)s,\
                           %(modified_date)s, %(download_date)s,\
                           %(source_domain)s, %(url)s, %(html_title)s,\
-                          %(ancestor)s, %(descendant)s, %(version)s,\
+                          %(ancestor)s, %(maintext)s, %(descendant)s, %(version)s,\
                           %(rss_title)s)")
 
     insert_archive = ("INSERT INTO ArchiveVersions(id, local_path,\
                           modified_date,download_date,source_domain,url,\
-                          html_title, ancestor, descendant, version,\
+                          html_title, ancestor,maintext, descendant, version,\
                           rss_title) VALUES (%(db_id)s, %(local_path)s,\
                           %(modified_date)s, %(download_date)s,\
                           %(source_domain)s, %(url)s, %(html_title)s,\
-                          %(ancestor)s, %(descendant)s, %(version)s,\
+                          %(ancestor)s, %(maintext)s, %(descendant)s, %(version)s,\
                           %(rss_title)s)")
 
     delete_from_current = ("DELETE FROM CurrentVersions WHERE id = %s")
@@ -206,7 +206,8 @@ class MySQLStorage(object):
                 'ancestor': old_version[7],
                 'descendant': old_version[8],
                 'version': old_version[9],
-                'rss_title': old_version[10], }
+                'rss_title': old_version[10],
+                'maintext': old_version[11], }
 
             # Update the version number and the ancestor variable for later references
             version = (old_version[9] + 1)
@@ -221,6 +222,7 @@ class MySQLStorage(object):
             'url': item['url'],
             'html_title': item['html_title'],
             'ancestor': ancestor,
+            'maintext': item['maintext'],
             'descendant': 0,
             'version': version,
             'rss_title': item['rss_title'], }
@@ -306,7 +308,7 @@ class ExtractedInformationStorage(object):
             'title_page': ExtractedInformationStorage.ensure_str(item['html_title']),
             'title_rss': ExtractedInformationStorage.ensure_str(item['rss_title']),
             'source_domain': ExtractedInformationStorage.ensure_str(item['source_domain']),
-            'maintext': item['article_text'],
+            'maintext': item['maintext'],
             'url': item['url']
         }
 
@@ -741,7 +743,7 @@ class PandasStorage(ExtractedInformationStorage):
         columns = [
             "source_domain", "title_page", "title_rss", "localpath", "filename",
             "date_download", "date_modify", "date_publish", "title", "description",
-            "text", "authors", "image_url", "language", 'url'
+            "maintext", "authors", "image_url", "language", 'url'
         ]
 
         working_path = self.cfg.section("Files")['working_path']
@@ -781,7 +783,7 @@ class PandasStorage(ExtractedInformationStorage):
             'title_rss': ExtractedInformationStorage.ensure_str(item['rss_title']),
             'source_domain':
             ExtractedInformationStorage.ensure_str(item['source_domain']),
-            'text': item['article_text'],
+            'maintext': item['maintext'],
             'url': item['url']
         }
         self.df.loc[item['url']] = article

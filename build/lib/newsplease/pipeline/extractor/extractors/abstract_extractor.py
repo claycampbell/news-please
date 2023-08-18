@@ -29,7 +29,7 @@ class AbstractExtractor:
         """Returns the description/lead paragraph of the extracted article."""
         return None
 
-    def _text(self, item):
+    def _maintext(self, item):
         """Returns the main text of the extracted article."""
         return None
 
@@ -57,7 +57,7 @@ class AbstractExtractor:
         article_candidate.extractor = self._name()
         article_candidate.title = self._title(item)
         article_candidate.description = self._description(item)
-        article_candidate.text = self._text(item)
+        article_candidate.maintext = self._maintext(item)
         article_candidate.topimage = self._topimage(item)
         article_candidate.author = self._author(item)
         article_candidate.publish_date = self._publish_date(item)

@@ -13,7 +13,7 @@ class NewsArticle(object):
     localpath = None
     source_domain = None
     maintext = None
-    text = None
+    #text = None
     title = None
     title_page = None
     title_rss = None
@@ -47,7 +47,6 @@ class NewsArticle(object):
             'localpath': self.localpath,
             'maintext': self.maintext,
             'source_domain': self.source_domain,
-            'text': self.text,
             'title': self.title,
             'title_page': self.title_page,
             'title_rss': self.title_rss,

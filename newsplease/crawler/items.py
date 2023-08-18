@@ -33,7 +33,7 @@ class NewscrawlerItem(scrapy.Item):
     # Extracted article description
     article_description = scrapy.Field()
     # Extracted article text body
-    article_text = scrapy.Field()
+    maintext= scrapy.Field()
     # Extracted top image of the article
     article_image = scrapy.Field()
     # Extracted article author

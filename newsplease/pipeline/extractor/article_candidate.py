@@ -5,7 +5,7 @@ class ArticleCandidate:
     url = None
     title = None
     description = None
-    text = None
+    maintext = None
     topimage = None
     author = None
     publish_date = None

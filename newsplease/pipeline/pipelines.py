@@ -136,14 +136,15 @@ class MySQLStorage(object):
     cursor = None
     # initialize necessary DB queries for this pipe
     compare_versions = ("SELECT * FROM CurrentVersions WHERE url=%s")
-    insert_current = ("INSERT INTO CurrentVersions(local_path,\
-                          modified_date,download_date,source_domain,url,\
-                          html_title, ancestor, descendant, version,\
-                          rss_title) VALUES (%(local_path)s,\
-                          %(modified_date)s, %(download_date)s,\
-                          %(source_domain)s, %(url)s, %(html_title)s,\
-                          %(ancestor)s, %(descendant)s, %(version)s,\
-                          %(rss_title)s)")
+    insert_current = ("INSERT INTO CurrentVersions(localpath,\
+                      date_modify, download_date, source_domain, url,\
+                      title_page, ancestor, descendant, version,\
+                      title_rss) VALUES (%(localpath)s,\
+                      %(date_modify)s, %(download_date)s,\
+                      %(source_domain)s, %(url)s, %(title_page)s,\
+                      %(ancestor)s, %(descendant)s, %(version)s,\
+                      %(title_rss)s)")
+
 
     insert_archive = ("INSERT INTO ArchiveVersions(id, local_path,\
                           modified_date,download_date,source_domain,url,\
@@ -295,18 +296,18 @@ class ExtractedInformationStorage(object):
         article = {
             'authors': item['article_author'],
             'date_download': item['download_date'],
-            'date_modify': item['modified_date'],
+            'date_modify': item['date_modify'],
             'date_publish': item['article_publish_date'],
             'description': item['article_description'],
             'filename': item['filename'],
             'image_url': item['article_image'],
             'language': item['article_language'],
-            'localpath': item['local_path'],
+            'localpath': item['localpath'],
             'title': item['article_title'],
             'title_page': ExtractedInformationStorage.ensure_str(item['html_title']),
             'title_rss': ExtractedInformationStorage.ensure_str(item['rss_title']),
             'source_domain': ExtractedInformationStorage.ensure_str(item['source_domain']),
-            'maintext': item['article_text'],
+            'maintext': item['self.maintext'],
             'url': item['url']
         }
 
@@ -741,7 +742,7 @@ class PandasStorage(ExtractedInformationStorage):
         columns = [
             "source_domain", "title_page", "title_rss", "localpath", "filename",
             "date_download", "date_modify", "date_publish", "title", "description",
-            "text", "authors", "image_url", "language", 'url'
+            "maintext", "authors", "image_url", "language", 'url'
         ]
 
         working_path = self.cfg.section("Files")['working_path']
@@ -781,7 +782,7 @@ class PandasStorage(ExtractedInformationStorage):
             'title_rss': ExtractedInformationStorage.ensure_str(item['rss_title']),
             'source_domain':
             ExtractedInformationStorage.ensure_str(item['source_domain']),
-            'text': item['article_text'],
+            'maintext': item['maintext'],
             'url': item['url']
         }
         self.df.loc[item['url']] = article

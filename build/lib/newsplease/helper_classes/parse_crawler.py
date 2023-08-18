@@ -75,7 +75,7 @@ class ParseCrawler(object):
         article['spider_response'] = response
         article['article_title'] = 'NULL'
         article['article_description'] = 'NULL'
-        article['article_text'] = 'NULL'
+        article['maintext'] = 'NULL'
         article['article_image'] = 'NULL'
         article['article_author'] = 'NULL'
         article['article_publish_date'] = 'NULL'
